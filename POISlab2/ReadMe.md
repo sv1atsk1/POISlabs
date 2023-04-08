@@ -37,5 +37,9 @@
 
 #### Поиск происходит путём заполнения одного из соответствующих полей
 
-## **Пример диалогового окна считывания / записи (с файла / в файл)**
+## **Пример диалогового окна считывания / записи (с файла / в файл):**
 ![Диалоговое окно считывания с файла](https://github.com/sv1atsk1/POISlabs/blob/main/POISlab2/screenshots%20for%20demonstration/FileReadorWrite.png)
+
+## **Пример файла для считывания:**
+![Пример файла для считывания](https://github.com/sv1atsk1/POISlabs/blob/main/POISlab2/screenshots%20for%20demonstration/JsonFile.png)
+
