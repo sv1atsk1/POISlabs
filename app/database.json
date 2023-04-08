@@ -1,0 +1,76 @@
+{
+    "items": [
+        {
+            "number": "1",
+            "departure_station": "Vitebsk",
+            "arrival_station": "Minsk",
+            "date_and_time_of_departure": "02.04 12:00",
+            "date_and_time_of_arrival": "02.04 12:25",
+            "time_in_travel":"12:05"
+          },
+          {
+            "number": "2",
+            "departure_station": "Gomel",
+            "arrival_station": "Brest",
+            "date_and_time_of_departure": "05.06 13:30",
+            "date_and_time_of_arrival": "05.06 18:00",
+            "time_in_travel":"4:30"
+          },
+          {
+            "number": "3",
+            "departure_station": "Mogilev",
+            "arrival_station": "Grodno",
+            "date_and_time_of_departure": "07.03 14:00",
+            "date_and_time_of_arrival": "07.03 18:45",
+            "time_in_travel":"4:45"
+          },
+          {
+            "number": "4",
+            "departure_station": "Brest",
+            "arrival_station": "Vitebsk",
+            "date_and_time_of_departure": "01.11 15:00",
+            "date_and_time_of_arrival": "01.11 18:35",
+            "time_in_travel":"3:35"
+          },
+          {
+            "number": "5",
+            "departure_station": "Grodno",
+            "arrival_station": "Minsk",
+            "date_and_time_of_departure": "03.12 16:30",
+            "date_and_time_of_arrival": "03.12 19:45",
+            "time_in_travel":"3:15"
+          },
+          {
+            "number": "6",
+            "departure_station": "Vitebsk",
+            "arrival_station": "Gomel",
+            "date_and_time_of_departure": "05.09 17:00",
+            "date_and_time_of_arrival": "05.09 21:45",
+            "time_in_travel":"4:45"
+          },
+          {
+            "number": "7",
+            "departure_station": "Minsk",
+            "arrival_station": "Brest",
+            "date_and_time_of_departure": "07.07 18:00",
+            "date_and_time_of_arrival": "07.07 22:35",
+            "time_in_travel":"4:35"
+          },
+          {
+            "number": "8",
+            "departure_station": "Gomel",
+            "arrival_station": "Mogilev",
+            "date_and_time_of_departure": "02.02 19:30",
+            "date_and_time_of_arrival": "02.02 22:45",
+            "time_in_travel":"3:15"
+          },
+          {
+            "number": "9",
+            "departure_station": "Minsk",
+            "arrival_station": "Vitebsk",
+            "date_and_time_of_departure": "03.04 20:00",
+            "date_and_time_of_arrival": "03.04 23:35",
+            "time_in_travel":"3:35"
+          }
+    ]
+  }
