@@ -270,6 +270,7 @@ def main():
         points_label = points_font.render(f"Points:{player.points}",1,(255,255,255))
 
         GAME_WINDOW.blit(points_label,(WIDTH/5 - points_label.get_width(),15))
+        GAME_WINDOW.blit(level_label,(WIDTH + 20 - points_label.get_width(),15))
 
         for enemy in enemies:
             enemy.draw(GAME_WINDOW)
