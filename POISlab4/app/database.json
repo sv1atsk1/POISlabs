@@ -1,0 +1,94 @@
+{
+    "items": [
+        {
+            "FIO": "Sviatski Viachaslau Alexeevich",
+            "card_number": "1234 4321 2233 4422",
+            "card_expiry_date": "06/26",
+            "PIN": "4352",
+            "CVV": "632",
+            "phone_balance":"5000",
+            "card_balance":"5000"
+          },
+          {
+            "FIO": "Ivanov Ivan Ivanovich",
+            "card_number": "1111 2222 3333 4444",
+            "card_expiry_date": "12/25",
+            "PIN": "1234",
+            "CVV": "987",
+            "phone_balance":"1000",
+            "card_balance":"10000"
+            },
+            {
+            "FIO": "Sidorov Petr Petrovich",
+            "card_number": "5555 4444 3333 2222",
+            "card_expiry_date": "09/24",
+            "PIN": "3456",
+            "CVV": "321",
+            "phone_balance":"2000",
+            "card_balance":"20000"
+            },
+            {
+            "FIO": "Kozlov Ivan Stepanovich",
+            "card_number": "7777 8888 9999 0000",
+            "card_expiry_date": "03/27",
+            "PIN": "6789",
+            "CVV": "456",
+            "phone_balance":"3000",
+            "card_balance":"30000"
+            },
+            {
+            "FIO": "Petrova Olga Sergeevna",
+            "card_number": "9999 8888 7777 6666",
+            "card_expiry_date": "11/23",
+            "PIN": "9876",
+            "CVV": "654",
+            "phone_balance":"4000",
+            "card_balance":"40000"
+            },
+            {
+            "FIO": "Smirnov Mikhail Vladimirovich",
+            "card_number": "4444 5555 6666 7777",
+            "card_expiry_date": "02/26",
+            "PIN": "2345",
+            "CVV": "789",
+            "phone_balance":"6000",
+            "card_balance":"60000"
+            },
+            {
+            "FIO": "Fedorov Alexei Viktorovich",
+            "card_number": "6666 7777 8888 9999",
+            "card_expiry_date": "05/24",
+            "PIN": "4567",
+            "CVV": "123",
+            "phone_balance":"7000",
+            "card_balance":"70000"
+            },
+            {
+            "FIO": "Vasiliev Dmitry Ivanovich",
+            "card_number": "2222 3333 4444 5555",
+            "card_expiry_date": "07/25",
+            "PIN": "5678",
+            "CVV": "890",
+            "phone_balance":"8000",
+            "card_balance":"80000"
+            },
+            {
+            "FIO": "Kuznetsova Anna Petrovna",
+            "card_number": "8888 9999 0000 1111",
+            "card_expiry_date": "08/23",
+            "PIN": "7890",
+            "CVV": "234",
+            "phone_balance":"9000",
+            "card_balance":"90000"
+            },
+            {
+            "FIO": "Popova Irina Aleksandrovna",
+            "card_number": "3333 2222 1111 0000",
+            "card_expiry_date": "01/27",
+            "PIN": "6789",
+            "CVV": "345",
+            "phone_balance":"10000",
+            "card_balance":"100000"
+            }
+    ]
+  }
