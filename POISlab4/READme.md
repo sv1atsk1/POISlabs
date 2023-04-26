@@ -1,6 +1,6 @@
 # **Установка зависимостей**
-   pip install kivymd
-   pip install kivy
+   * pip install kivymd
+   * pip install kivy
 
 # Приложение представляет собой простейший GUI,выполняющий роль таблицы поездов.
 
