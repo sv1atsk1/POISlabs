@@ -1,4 +1,5 @@
 
+
 from kivy.config import Config
 Config.set("graphics", "width", 1820)
 Config.set("graphics", "height", 980)
@@ -14,9 +15,9 @@ from kivymd.uix.textfield import MDTextField
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFlatButton, MDRaisedButton
 from kivymd.uix.anchorlayout import MDAnchorLayout
-#from main import *
 import json 
 import os.path
+import re
 
 
 KV = '''
@@ -82,9 +83,14 @@ class POISlab2(MDApp):
     dialog_for_filtering = None
     dialog_for_removing = None
     dialog_for_writing_reading_file = None
-    info,info1,error_dialog = None,None,None
+    info,info1,error_file_read_dialog = None,None,None
     dialog_for_paying_phone = None
     dialog_for_withdrawal_by_card = None
+    dialog_add_row_error = None
+    
+
+    S_RUS = "абвгдеёжзийклмнопрстуфхцчшщьыъэюя"
+    Numbers = "1234567890"
 
     def on_button_press(self, instance_button: MDFlatButton):
         try:
@@ -105,6 +111,7 @@ class POISlab2(MDApp):
                 "Пополнить баланс телефона": self.phone_paying_function,
                 "Закрыть окно": self.close_card_withdrawal_dialog,
                 "Снять деньги с карты": self.card_withdraw_function,
+                "Ввести данные заново": self.close_dialog_add_row_error,
             }[instance_button.text]()
         except KeyError:
             pass
@@ -132,22 +139,25 @@ class POISlab2(MDApp):
     def read_file(self):
         self.clear_data_base() 
         file_name = self.get_for_writing_reading_file_dialog_data()
-        if os.path.isfile(file_name["File Name"].text):
-            json_file = open(file_name["File Name"].text, "r")
-            data_base = json.load(json_file)
-            for item in data_base["items"]:
-                self.table.add_row((item["FIO"], item["card_number"],
-                                          item["card_expiry_date"], item["PIN"],
-                                          item["CVV"],item["phone_balance"],item["card_balance"]))
-            json_file.close()
-            self.dialog_for_writing_reading_file.dismiss()
+        file_path = "C:\\Users\\kN1GGhT\\VisualStudioCodeProjects\\POISlab4\\app\\" + file_name["File Name"].text
+        if os.path.isfile(file_path):
+            try:
+                with open(file_path, "r") as json_file:
+                    data_base = json.load(json_file)
+                    for item in data_base["items"]:
+                        self.table.add_row((item["FIO"], item["card_number"],
+                                                item["card_expiry_date"], item["PIN"],
+                                                item["CVV"],item["phone_balance"],item["card_balance"]))
+                self.dialog_for_writing_reading_file.dismiss()
+            except json.JSONDecodeError:
+                self.error_add_row_func()
         else:
-            self.error_file_dialog()
+            self.error_file_read_dialog_func()
 
 
-    def error_file_dialog(self):
-        self.error_dialog = MDDialog(
-            text="The File Does Not Exist!",
+    def error_file_read_dialog_func(self):
+        self.error_file_read_dialog = MDDialog(
+            text="Упс,файла не существует!",
             buttons=[
                 MDFlatButton(
                     text="Попробовать заново",
@@ -157,10 +167,34 @@ class POISlab2(MDApp):
                 ),
             ],
         )
-        self.error_dialog.open()
+        self.error_file_read_dialog.open()
+
+    def error_add_row_func(self):
+        self.dialog_add_row_error = MDDialog(
+            text = "Упс,вы ошиблись при вводе информации",
+            buttons=[
+                MDFlatButton(
+                    text = 'Ввести данные заново',
+                    font_style = 'Button',
+                    font_size = '17',
+                    on_release = self.on_button_press,
+                ),
+            ],
+        )
+        self.dialog_add_row_error.open()
+
+
 
     def write_file(self):
         file_name = self.get_for_writing_reading_file_dialog_data()
+        if not file_name["File Name"].text:
+            self.error_add_row_func()
+            return
+        
+        if not re.match("^[a-zA-Z0-9_]+\.json$", file_name["File Name"].text):
+            self.error_add_row_func()
+            return
+    
         with open(file_name["File Name"].text, "w+") as outfile:
             json.dump(self.get_rows(), outfile,indent='\t')
         self.dialog_for_writing_reading_file.dismiss()
@@ -250,24 +284,28 @@ class POISlab2(MDApp):
         self.dialog_for_withdrawal_by_card.open()
 
 
-    def card_withdraw_function(self):
+    def phone_paying_function(self):
         data = self.get_rows()
-        answers = self.get_card_withdrawal_dialog_data()
+        answers = self.get_phone_paying_dialog_data()
         counter = -1
         self.result_data = []
-        for field in answers:
-            if answers[field].text:
-                if field == "number_of_card_account":
-                    number_of_account = int(answers[field].text)
-                
-                elif field == "sum_of_card_withdrawal":
-                    sum_of_withdraw = int(answers[field].text)
+    
+        if not re.match("^\d+$", answers["number_of_account"].text):
+            self.error_add_row_func()
+            return
+    
+        if not re.match("^\d+$", answers["sum_of_phone_payment"].text):
+            self.error_add_row_func()
+            return
+    
+        number_of_account = int(answers["number_of_account"].text)
+        sum_of_payment = int(answers["sum_of_phone_payment"].text)
 
         for item in data["items"]:
-            counter +=1
+            counter += 1
             for section in item:
-                if section == "card_balance" and counter == number_of_account:
-                    item[section] = int(item[section] - sum_of_withdraw)
+                if section == "phone_balance" and counter == number_of_account:
+                    item[section] = int(item[section] + sum_of_payment)
                     self.table.add_row((item["FIO"], item["card_number"],
                                     item["card_expiry_date"], item["PIN"], item["CVV"],item["phone_balance"],item["card_balance"]))
                     self.table.remove_row(self.table.row_data[number_of_account])
@@ -275,24 +313,34 @@ class POISlab2(MDApp):
                 else:
                     pass
 
-    def phone_paying_function(self):
+    def card_withdraw_function(self):
         data = self.get_rows()
-        answers = self.get_phone_paying_dialog_data()
+        answers = self.get_card_withdrawal_dialog_data()
         counter = -1
         self.result_data = []
-        for field in answers:
-            if answers[field].text:
-                if field == "number_of_account":
-                    number_of_account = int(answers[field].text)
-                
-                elif field == "sum_of_phone_payment":
-                    sum_of_payment = int(answers[field].text)
+    
+        if not re.match("^\d+$", answers["number_of_card_account"].text):
+            self.error_add_row_func()
+            return
+    
+        if not re.match("^\d+$", answers["sum_of_card_withdrawal"].text):
+            self.error_add_row_func()
+            return
+    
+        number_of_account = int(answers["number_of_card_account"].text)
+        sum_of_withdraw = int(answers["sum_of_card_withdrawal"].text)
 
         for item in data["items"]:
-            counter +=1
+            counter += 1
             for section in item:
-                if section == "phone_balance" and counter == number_of_account:
-                    item[section] = int(item[section] + sum_of_payment)
+                if section == "card_balance" and counter == number_of_account:
+                    item[section] = int(item[section] - sum_of_withdraw)
+
+                    if item[section] < 0:
+                        self.error_add_row_func()
+                        item[section] = int(item[section] + sum_of_withdraw)
+                        return
+                
                     self.table.add_row((item["FIO"], item["card_number"],
                                     item["card_expiry_date"], item["PIN"], item["CVV"],item["phone_balance"],item["card_balance"]))
                     self.table.remove_row(self.table.row_data[number_of_account])
@@ -307,6 +355,34 @@ class POISlab2(MDApp):
         section_for_search = field_for_search = None
         counter = 0
         self.new_data = []
+    
+        if not re.match( r'^[а-яА-Я]+\s[а-яА-Я]+\s[а-яА-Я]+$',filled_fields["FIO"].text):
+            self.error_add_row_func()
+            return
+        
+        if not re.match(r'^\d{16}$', filled_fields["card_number"].text):
+            self.error_add_row_func()
+            return
+        
+        if not re.match(r'^\d{2}/\d{2}$', filled_fields["card_expiry_date"].text):
+            self.error_add_row_func()
+            return
+        
+        if not re.match(r'^\d{3}$', filled_fields["CVV"].text):
+            self.error_add_row_func()
+            return
+        
+        if not re.match(r'^\d{4}$', filled_fields["PIN"].text):
+            self.error_add_row_func()
+            return
+        
+        fields_to_check = ["phone_balance", "card_balance"]
+        for field_name in fields_to_check:
+            field_value = item[field_name].text
+            if not re.match(r'^\d+$', field_value):
+                self.error_add_row_func()
+                return
+
         for field in filled_fields:
             if filled_fields[field].text:
                 section_for_search = field
@@ -417,7 +493,11 @@ class POISlab2(MDApp):
 
 
     def close_error_dialog(self):
-        self.error_dialog.dismiss()
+        self.error_file_read_dialog.dismiss()
+
+
+    def close_dialog_add_row_error(self):
+        self.dialog_add_row_error.dismiss()
 
     def close_info_dialog(self):
         self.info.dismiss()
@@ -468,6 +548,36 @@ class POISlab2(MDApp):
     
     def add_row(self):
         item = self.get_adding_dialog_data()
+
+    
+        if not re.match( r'^[а-яА-Я]+\s[а-яА-Я]+\s[а-яА-Я]+$',item["FIO"].text):
+            self.error_add_row_func()
+            return
+        
+        if not re.match(r'^\d{16}$', item["card_number"].text):
+            self.error_add_row_func()
+            return
+        
+        if not re.match(r'^\d{2}/\d{2}$', item["card_expiry_date"].text):
+            self.error_add_row_func()
+            return
+        
+        if not re.match(r'^\d{3}$', item["CVV"].text):
+            self.error_add_row_func()
+            return
+        
+        if not re.match(r'^\d{4}$', item["PIN"].text):
+            self.error_add_row_func()
+            return
+        
+        fields_to_check = ["phone_balance", "card_balance"]
+        for field_name in fields_to_check:
+            field_value = item[field_name].text
+            if not re.match(r'^\d+$', field_value):
+                self.error_add_row_func()
+                return
+
+   
         self.table.add_row((item["FIO"].text, 
                             item["card_number"].text,
                             item["card_expiry_date"].text, 
@@ -719,15 +829,4 @@ class POISlab2(MDApp):
 
 a = POISlab2()
 a.run()
-
-#if __name__ == "__main__":
-    #print("Выберите вариант работы:\n"
-          #"1 - Консоль\n"
-          #"2 - GUI\n")
-    #choice = int(input())
-    #if choice == 1:
-        #autorization()
-    #elif choice == 2:      
-    #a = POISlab2()
-    #a.run()
 
